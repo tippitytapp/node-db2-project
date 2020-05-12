@@ -1,31 +1,31 @@
 const express = require('express');
-const Cars = require('../data/dbConfig.js');
-const {validateCarEntry, validateCarID} = require('../api/MiddleWare.js')
+const Sales = require('../data/dbConfig.js');
+const {validateSaleEntry, validateSaleID} = require('../api/MiddleWare.js')
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    Cars('cars')
-    .then(cars => {
+    Sales('sale')
+    .then(Sales => {
         res.status(200).json({
-            data: cars})
+            data: Sales})
     })
     .catch(error => {
         res.status(500).json({
-            errorMessage: "Error retrieving cars",
+            errorMessage: "Error retrieving Sales",
             error
         })
     })
 })
 
-router.post('/', validateCarEntry, (req, res)=>{
-    const car = req.body;
-    Cars.insert(car, 'id')
-        .into('cars')
+router.post('/', validateSaleEntry, (req, res)=>{
+    const sale = req.body;
+    Sales.insert(sale, 'id')
+        .into('sale')
         .then(id => {
             if(id){
                 res.status(201).json({
                     data: id,
-                    message: "Car added successfully"
+                    message: "sale added successfully"
                 })
             }
         })
@@ -36,28 +36,28 @@ router.post('/', validateCarEntry, (req, res)=>{
         })
 })
 
-router.get('/:id', validateCarID, (req, res) => {
-    Cars('cars')
+router.get('/:id', validateSaleID, (req, res) => {
+    Sales('sale')
         .where({id: req.params.id})
         .first()
-        .then(car => {
+        .then(sale => {
             res.status(200).json({
-                data: car
+                data: sale
             })
         })
         .catch(error => {
             res.status(500).json({
-                errorMessage: "Error retrieving car from database",
+                errorMessage: "Error retrieving sale from database",
                 error
             })
         })
 })
 
-router.put('/:id', validateCarID, validateCarEntry, (req, res) => {
-    const car = req.body;
-    Cars('cars')
+router.put('/:id', validateSaleID, validateSaleEntry, (req, res) => {
+    const sale = req.body;
+    Sales('sale')
         .where({id: req.params.id})
-        .update(car, 'id')
+        .update(sale, 'id')
         .then(count=> {
             if (count > 0){
                 res.status(200).json({
@@ -66,20 +66,20 @@ router.put('/:id', validateCarID, validateCarEntry, (req, res) => {
                 })
             }else{
                 res.status(500).json({
-                    errorMessage: "Could not update car information"
+                    errorMessage: "Could not update sale information"
                 })
             }
         })
         .catch(error => {
             res.status(500).json({
-                errorMessage: "Could not update car information",
+                errorMessage: "Could not update sale information",
                 error
             })
         })
 })
 
-router.delete('/:id', validateCarID, (req, res) => {
-    Cars('cars')
+router.delete('/:id', validateSaleID, (req, res) => {
+    Sales('sale')
         .where({id: req.params.id})
         .first()
         .del()
@@ -87,11 +87,11 @@ router.delete('/:id', validateCarID, (req, res) => {
             if(count > 0){
                 res.status(200).json({
                     deletedCount: count,
-                    statusMessage: "Car successfully deleted"
+                    statusMessage: "sale successfully deleted"
                 })
             } else {
                 res.status(500).json({
-                    errorMessage: "Error deleting car"
+                    errorMessage: "Error deleting sale"
                 })
             }
         })
