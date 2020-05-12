@@ -35,6 +35,8 @@ router.post('/', validateEntry, (req, res)=>{
             })
         })
 })
-
+router.get('/:id', (req, res) => {
+    Cars()
+})
 
 module.exports = router;

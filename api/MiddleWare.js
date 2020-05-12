@@ -29,3 +29,7 @@ function validateEntry(req, res, next){
         next();
     }
 }
+
+function validateID(req, res, next){
+    next();
+}
