@@ -3,6 +3,8 @@ exports.up = function(knex) {
   return knex.schema.createTable('sale', table => {
       table.increments();
       table.timestamps(true, true);
+      table.integer('car').unsigned().notNullable();
+      table.foreign('car').references('id').inTable('cars')
       table.string('customer_name').notNullable();
       table.string('phone').notNullable();
       table.string('address').notNullable();
