@@ -1,7 +1,8 @@
 const Cars = require('../data/dbConfig.js')
 
 module.exports = {
-    validateEntry
+    validateEntry,
+    validateID
 }
 
 function validateEntry(req, res, next){
@@ -31,5 +32,23 @@ function validateEntry(req, res, next){
 }
 
 function validateID(req, res, next){
-    next();
+    Cars('cars')
+        .where({id: req.params.id})
+        .first()
+        .then(car => {
+            if(car){
+                next();
+            } else {
+                res.status(404).json({
+                    errorMessage: "No car matching that ID found"
+                })
+            }
+        })
+        .catch(error => {
+            res.status(500).json({
+                errorMessage: "Error retrieving car",
+                error
+            })
+        })
+
 }
